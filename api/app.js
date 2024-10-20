@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const queries = require("./prisma/queries");
 dotenv.config();
 const app = express();
+app.use(express.urlencoded({ extended: false }));
 app.get("/", (req, res) => {
   res.send("Serving You!");
 });
@@ -47,7 +48,12 @@ app.delete("/posts/:postid", async (req, res) => {
   console.log("Post deleted");
   res.send("Post deleted");
 });
-
+app.delete("/comments/:commentid", async (req, res) => {
+  const commentid = req.params.commentid;
+  await queries.deleteComment(commentid);
+  console.log("Comment deleted");
+  res.send("Comment deleted");
+});
 app.listen(process.env.PORT, () => {
   "Listening On Port 3000";
 });
